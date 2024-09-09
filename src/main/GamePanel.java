@@ -7,6 +7,8 @@ import java.awt.Graphics2D;
 
 import javax.swing.JPanel;
 
+import Entity.Player;
+
 // Configures the screen settings.
 public class GamePanel extends JPanel implements Runnable {
 	// SCREEN SETTINGS
@@ -14,7 +16,7 @@ public class GamePanel extends JPanel implements Runnable {
 	final int originalTileSize = 16; // 16x16 pixel tile size and map map tiles.
 	final int scale = 3;
 	
-	final int tileSize = originalTileSize * scale; // 48x48 actual tile size.
+	public final int tileSize = originalTileSize * scale; // 48x48 actual tile size.
 	final int maxScreenCol = 16;
 	final int maxScreenRow = 12;
 	final int screenWidth = tileSize * maxScreenCol; // 768 pixels
@@ -22,6 +24,8 @@ public class GamePanel extends JPanel implements Runnable {
 	
 	KeyHandler keyH = new KeyHandler();
 	Thread gameThread;
+	
+	Player player = new Player(this, keyH);
 	
 	int FPS = 60;
 	
@@ -107,18 +111,7 @@ public class GamePanel extends JPanel implements Runnable {
 	
 	// Limit the update speed so we don't do a million frames per keypress.
 	public void update() {
-		if (keyH.downPressed == true) {
-			playerY += playerSpeed;
-		}
-		else if (keyH.upPressed == true) {
-			playerY -= playerSpeed;
-		}
-		else if (keyH.leftPressed == true) {
-			playerX -= playerSpeed;
-		}
-		else if (keyH.rightPressed == true) {
-			playerX += playerSpeed;
-		}
+		player.update();
 	}
 	
 	public void paintComponent(Graphics g) { // Java in house function.
@@ -128,8 +121,7 @@ public class GamePanel extends JPanel implements Runnable {
 		// Converts graphics to 2D for easier manipulation;
 		Graphics2D g2 = (Graphics2D)g;
 		
-		g2.setColor(Color.white); // Set drawing color
-		g2.fillRect(playerX, playerY, tileSize, tileSize); // Set what the drawing is
+		player.draw(g2);
 		
 		g2.dispose(); // Remove the drawing to save memory resources after it's created
 	}
