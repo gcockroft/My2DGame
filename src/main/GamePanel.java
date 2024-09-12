@@ -8,6 +8,7 @@ import java.awt.Graphics2D;
 import javax.swing.JPanel;
 
 import Entity.Player;
+import tile.TileManager;
 
 // Configures the screen settings.
 public class GamePanel extends JPanel implements Runnable {
@@ -17,11 +18,12 @@ public class GamePanel extends JPanel implements Runnable {
 	final int scale = 3;
 	
 	public final int tileSize = originalTileSize * scale; // 48x48 actual tile size.
-	final int maxScreenCol = 16;
-	final int maxScreenRow = 12;
+	public final int maxScreenCol = 16;
+	public final int maxScreenRow = 12;
 	final int screenWidth = tileSize * maxScreenCol; // 768 pixels
 	final int screenHeight = tileSize * maxScreenRow; // 576 pixels
 	
+	TileManager tileM = new TileManager(this);
 	KeyHandler keyH = new KeyHandler();
 	Thread gameThread;
 	
@@ -121,6 +123,8 @@ public class GamePanel extends JPanel implements Runnable {
 		// Converts graphics to 2D for easier manipulation;
 		Graphics2D g2 = (Graphics2D)g;
 		
+		// Draw tiles below player.
+		tileM.draw(g2);
 		player.draw(g2);
 		
 		g2.dispose(); // Remove the drawing to save memory resources after it's created
